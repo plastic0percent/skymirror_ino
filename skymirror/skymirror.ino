@@ -19,9 +19,9 @@ const int pressure_sens_pin = A0;
 
 // Global objects
 // The fish repeller is a beeper
-Beeper fish_repeller;
+Beeper fish_repeller(fish_repeller_pin);
 // Pressure sensor
-DFRobot_Pressure pressure_sens;
+DFRobot_Pressure pressure_sens(pressure_sens_pin);
 // MPU6050 motion sensor on I2C
 Adafruit_MPU6050 mpu;
 // GPS Decoder
@@ -57,9 +57,6 @@ void setup()
     SerialC.begin(115200);
     init_bluetooth();
     init_mpu();
-    // These two should not fail
-    fish_repeller = Beeper::Beeper(fish_repeller_pin);
-    pressure_sens = DFRobot_Pressure::DFRobot_Pressure(pressure_sens_pin);
     // TODO: Camera, Motor
 }
 
