@@ -1,0 +1,12 @@
+[submodule "libraries/MPU6050"]
+	path = libraries/MPU6050
+	url = git@github.com:adafruit/Adafruit_MPU6050.git
+[submodule "libraries/TinyGPSPlus"]
+	path = libraries/TinyGPSPlus
+	url = git@github.com:mikalhart/TinyGPSPlus.git
+[submodule "libraries/DFRobot_Pressure"]
+	path = libraries/DFRobot_Pressure
+	url = git@github.com:plastic0percent/DFRobot_Pressure.git
+[submodule "libraries/Beeper"]
+	path = libraries/Beeper
+	url = git@github.com:plastic0percent/Beeper.git
