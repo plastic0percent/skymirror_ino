@@ -69,7 +69,7 @@ void setup()
 // - 0x02   : receive current speed
 // - 0x03   : receive current depth
 // - 0x04   : receive current gps location
-// - 0x10 $1: set speed to $1 m/s
+// - 0x10 $1: set speed to $1*0.02 m/s
 // - 0x20 $1 $2: set direction to $i degrees N, cw if $2 is 0, ccw is $2 is 1
 // - 0x30 $1: set depth to $1 m
 // - 0x40 $1: set fish repeller frequency to $1 Hz
