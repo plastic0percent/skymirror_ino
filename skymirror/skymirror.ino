@@ -1,3 +1,13 @@
+// Place for refs:
+// Motor/ESC:
+// https://www.arduino.cc/reference/en/libraries/rc_esc/
+// https://www.robotshop.com/community/blog/show/rc-speed-controller-esc-arduino-library
+//
+// OV7670:
+// https://www.elecrow.com/download/OV7670_DS_(1_4).pdf
+// https://www.elecrow.com/download/AL422b.pdf
+// http://e-structshop.com/structwp/wp-content/uploads/2014/12/SCCBSpec_AN.pdf
+// http://www.therandomlab.com/2016/06/arduvision-ii-ov7670-fifo-module-and.html
 #include "Adafruit_MPU6050.h"
 #include "Beeper.h"
 #include "Pressure.h"
@@ -12,8 +22,8 @@
 #define SerialC Serial
 // Beeper at pin 42
 const int fish_repeller_pin = 42;
-// Main motor ESC at pin 43
-const int esc_pwm_pin = 43;
+// Main motor ESC at pin 10
+const int esc_pwm_pin = 10;
 // Pressure sensor at pin A0
 const int pressure_sens_pin = A0;
 
@@ -96,10 +106,10 @@ void exec_bluetooth_cmd()
 void loop()
 {
     log("Loop");
-    fish_repeller.beep(1000, 1.0);
+    fish_repeller.beep(100, 0.1);
     if (SerialB.available())
     {
         exec_bluetooth_cmd();
     }
-    delay(9);
+    delay(60000);
 }
