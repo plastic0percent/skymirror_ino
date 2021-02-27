@@ -1,6 +1,6 @@
 {
     "board": "arduino:avr:mega",
-    "configuration": "cpu=atmega2560",
     "programmer": "AVR ISP",
-    "sketch": "skymirror/skymirror.ino"
+    "sketch": "skymirror/skymirror.ino",
+    "configuration": "cpu=atmega2560"
 }

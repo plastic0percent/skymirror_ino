@@ -7,15 +7,15 @@
                 "/Users/zmy/Documents/Arduino/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/hardware/tools/**",
-                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/**",
-                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino"
+                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/**"
             ],
             "forcedInclude": [
                 "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino/Arduino.h"
             ],
             "defines": [
                 "USBCON",
-                "ARDUINO=100"
+                "__AVR_ATmega2560__",
+                "ARDUINO=10800"
             ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",

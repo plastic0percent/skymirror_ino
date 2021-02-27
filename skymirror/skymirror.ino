@@ -8,69 +8,29 @@
 // https://www.elecrow.com/download/AL422b.pdf
 // http://e-structshop.com/structwp/wp-content/uploads/2014/12/SCCBSpec_AN.pdf
 // http://www.therandomlab.com/2016/06/arduvision-ii-ov7670-fifo-module-and.html
+//
+// Kalman filter:
+// Tutorial: http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
+// Explanation:
+// https://www.cs.cmu.edu/~motionplanning/papers/sbp_papers/kalman/kleeman_understanding_kalman.pdf
+// Implementation:
+// https://www.arduino.cc/reference/en/libraries/kalman-filter-library/
+
 #include "Adafruit_MPU6050.h"
 #include "Beeper.h"
 #include "Pressure.h"
 #include "TinyGPS++.h"
 
-// Constants
-// GPS on Serial2
-#define SerialG Serial2
-// Bluetooth on Serial1
-#define SerialB Serial1
-// Computer on Serial0
-#define SerialC Serial
-// Beeper at pin 42
-const int fish_repeller_pin = 42;
-// Main motor ESC at pin 10
-const int esc_pwm_pin = 10;
-// Pressure sensor at pin A0
-const int pressure_sens_pin = A0;
-
-// Global objects
-// The fish repeller is a beeper
-Beeper fish_repeller(fish_repeller_pin);
-// Pressure sensor
-DFRobot_Pressure pressure_sens(pressure_sens_pin);
-// MPU6050 motion sensor on I2C
-Adafruit_MPU6050 mpu;
-// GPS Decoder
-TinyGPSPlus gps;
-
-void log(const char *message)
-{
-    SerialC.println(message);
-    SerialB.println(message);
-}
-
-// Initialize bluetooth
-void init_bluetooth()
-{
-    log("Initializing Bluetooth");
-    SerialB.begin(9600);
-    // Wait for bluetooth to be up
-    while (!SerialB)
-        delay(1);
-    log("Bluetooth initialized");
-}
-
-void init_mpu()
-{
-    // Try to initialize MPU6050
-    if (!mpu.begin())
-    {
-        log("Failed to initialize MPU6050, check wiring");
-        while (1)
-            delay(10);
-    }
-    log("MPU6050 initialized");
-}
+#include "definitions.ino.h"
+#include "initialize.ino.h"
+#include "util.ino.h"
 
 void setup()
 {
     SerialC.begin(115200);
     init_bluetooth();
     init_mpu();
+    init_gps();
     // TODO: Camera, Motor
 }
 
@@ -88,28 +48,34 @@ void exec_bluetooth_cmd()
     int cmd = SerialB.read();
     switch (cmd)
     {
+        case 0x03:
+            SerialB.print(F("Depth: "));
+            SerialB.print(pressure_sens.get_depth_mm());
+            SerialB.println(F("mm"));
+            SerialC.print(F("Depth: "));
+            SerialC.print(pressure_sens.get_depth_mm());
+            SerialC.println(F("mm"));
+            break;
         case 0x01:
         case 0x02:
-        case 0x03:
         case 0x04:
         case 0x10:
         case 0x20:
         case 0x30:
         case 0x40:
-            log("Stub");
+            log(F("Stub"));
             break;
         default:
-            log("Unrecognized command received from bluetooth");
+            log(F("Unrecognized command received from bluetooth"));
     }
 }
 
 void loop()
 {
-    log("Loop");
     fish_repeller.beep(100, 0.1);
     if (SerialB.available())
     {
         exec_bluetooth_cmd();
     }
-    delay(60000);
+    delay(1000);
 }
