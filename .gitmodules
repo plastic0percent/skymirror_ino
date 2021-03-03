@@ -10,3 +10,9 @@
 [submodule "libraries/Beeper"]
 	path = libraries/Beeper
 	url = git@github.com:plastic0percent/Beeper.git
+[submodule "libraries/RC_ESC"]
+	path = libraries/RC_ESC
+	url = git@github.com:RB-ENantel/RC_ESC.git
+[submodule "libraries/Servo"]
+	path = libraries/Servo
+	url = git@github.com:arduino-libraries/Servo.git

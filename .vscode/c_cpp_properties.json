@@ -3,8 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
+                "${workspaceRoot}/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/tools/**",
-                "/Users/zmy/Documents/Arduino/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/hardware/tools/**",
                 "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/**"

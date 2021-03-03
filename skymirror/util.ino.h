@@ -16,7 +16,7 @@ void log(MsgType message)
 unsigned long update_counter(unsigned long *counter)
 {
     // Modulus add is closed so we do not need to worry about overflow
-    // unless two overflows occured
+    // unless two overflows occurred
     unsigned long old_cnt = *counter;
     unsigned long new_cnt = millis();
     *counter = new_cnt;
@@ -28,7 +28,7 @@ unsigned long update_counter(unsigned long *counter)
 unsigned long update_counter_micros(unsigned long *counter)
 {
     // Modulus add is closed so we do not need to worry about overflow
-    // unless two overflows occured
+    // unless two overflows occurred
     unsigned long old_cnt = *counter;
     unsigned long new_cnt = micros();
     *counter = new_cnt;
