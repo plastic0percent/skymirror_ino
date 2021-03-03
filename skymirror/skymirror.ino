@@ -24,7 +24,8 @@
 // http://www.chrobotics.com/library/accel-position-velocity
 //
 // Other things about MPU6050:
-// Datasheet: https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf
+// Datasheet:
+// https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf
 // Runge-Kutta Methods: https://en.wikipedia.org/wiki/Runge–Kutta_methods
 //
 // GPS:
@@ -36,8 +37,8 @@
 #include "Adafruit_MPU6050.h"
 #include "Beeper.h"
 #include "Pressure.h"
-#include "TinyGPS++.h"
 #include "Servo.h"
+#include "TinyGPS++.h"
 
 #include "definitions.ino.h"
 #include "initialize.ino.h"
@@ -49,8 +50,9 @@ void setup()
     init_bluetooth();
     init_mpu();
     init_gps();
-    esc.arm();
+    init_esc();
     servo.attach(6);
+    servo.write(servo_pos);
     // TODO: Camera
 }
 
@@ -65,9 +67,10 @@ void setup()
 // - 0x20 $1: set direction to $i degrees N (cw)
 // - 0x21 $1: set direction to $i degrees N (ccw)
 // - 0x30 $1: set depth to $1 m
-// - 0x40 $1: set fish repeller frequency to $1*10 Hz
+// - 0x40 $1: set fish repeller frequency to $1*30 Hz
 // - 0x50 $1: (raw) set esc speed to $1
 // - 0x60 $1: (raw) set turning angle to $1
+// - 0x70   : (raw) re-run init
 void exec_bluetooth_cmd()
 {
     int cmd = SerialB.read();
@@ -94,14 +97,14 @@ void exec_bluetooth_cmd()
             break;
         case 0x40:
             log(F("Setting fish_repeller to: "));
-            log(arg * 10);
-            fish_repeller.beep_forever(arg * 10);
+            log(arg * 30);
+            fish_repeller.beep_forever(arg * 30);
             break;
         case 0x50:
             esc_speed = arg;
             log(F("Setting ESC speed to: "));
-            log(esc_speed);
-            esc.speed(esc_speed);
+            log(esc_speed * 10);
+            esc.speed(esc_speed * 10);
             break;
         case 0x60:
             servo_pos = arg;
@@ -109,6 +112,8 @@ void exec_bluetooth_cmd()
             log(servo_pos);
             servo.write(servo_pos);
             break;
+        case 0x70:
+            setup();
         default:
             log(F("Unrecognized command received from bluetooth"));
     }

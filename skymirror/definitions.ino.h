@@ -42,6 +42,6 @@ Servo servo;
 int servo_pos = 38;
 // Main motor ESC
 ESC esc(7, speed_min, speed_max, 500);
-// speed
-int esc_speed;
+// speed, 1501-2000 are forward, 1000-1499 are backward, 1500 is stop
+int esc_speed = 1500;
 #endif

@@ -39,4 +39,23 @@ void init_mpu()
     log(F("MPU6050 initialized"));
 }
 
+// Initialize ESC and motor
+void init_esc()
+{
+    log(F("Initializing ESC and motor"));
+    esc.arm();
+    // Sometimes these cycles are required to initiate the ESC
+    for (int speed = 1500; speed <= 2000; ++speed)
+    {
+        esc.speed(speed);
+        delay(10);
+    }
+    for (int speed = 2000; speed > 1500; --speed)
+    {
+        esc.speed(speed);
+        delay(10);
+    }
+    log(F("ESC and motor initialized"));
+}
+
 #endif

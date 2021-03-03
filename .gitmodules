@@ -1,5 +1,5 @@
 [submodule "libraries/MPU6050"]
-	path = libraries/MPU6050
+	path = libraries/Adafruit_MPU6050
 	url = git@github.com:adafruit/Adafruit_MPU6050.git
 [submodule "libraries/TinyGPSPlus"]
 	path = libraries/TinyGPSPlus
@@ -16,3 +16,9 @@
 [submodule "libraries/Servo"]
 	path = libraries/Servo
 	url = git@github.com:arduino-libraries/Servo.git
+[submodule "libraries/Adafruit_BusIO"]
+	path = libraries/Adafruit_BusIO
+	url = git@github.com:adafruit/Adafruit_BusIO.git
+[submodule "libraries/Adafruit_Sensor"]
+	path = libraries/Adafruit_Sensor
+	url = git@github.com:adafruit/Adafruit_Sensor.git
