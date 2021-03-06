@@ -42,6 +42,7 @@
 
 #include "definitions.ino.h"
 #include "initialize.ino.h"
+#include "positioning.ino.h"
 #include "util.ino.h"
 
 void setup()
@@ -58,37 +59,82 @@ void setup()
 
 // Bluetooth commands:
 // All commands take 2 bytes even if they do not require an argument.
-// - 0x01 $1: receive $1 frames from the camera
-// - 0x02   : receive current speed
-// - 0x03   : receive current depth
-// - 0x04   : receive current gps location
 // - 0x00   : calibrate sensors
+// - 0x01 $1: receive $1 frames from the camera (JSON between STX and ETX)
+/* {
+    "image": "$base64-image"
+} */
+// - 0x02   : query status (JSON between STX and ETX)
+/* {
+    "time": "",                   // UTC time, yyyy-mm-ddThh:mm:ss
+                                  // (ISO8601 w/o timezone)
+    "accel": [0.0, 0.0, 0.0],     // x,y,z m/s2
+    "speed": [0.0, 0.0, 0.0],     // x,y,z m/s
+    "displ": [0.0, 0.0, 0.0],     // x,y,z m
+    "pressure": 10.0,             // kPa
+    "depth": 10.0,                // m
+    "lat": 0.0,                   // degrees
+    "lon": 0.0                    // degrees
+}*/
 // - 0x10 $1: set speed to $1*0.02 m/s
 // - 0x20 $1: set direction to $i degrees N (cw)
 // - 0x21 $1: set direction to $i degrees N (ccw)
 // - 0x30 $1: set depth to $1 m
-// - 0x40 $1: set fish repeller frequency to $1*30 Hz
-// - 0x50 $1: (raw) set esc speed to $1
+// - 0x40 $1: set fish repeller frequency to $1 * 30 Hz
+// - 0x50 $1: (raw) set esc speed to $1 * 10
 // - 0x60 $1: (raw) set turning angle to $1
-// - 0x70   : (raw) re-run init
+// - 0xff   : (raw) re-run init
 void exec_bluetooth_cmd()
 {
     int cmd = SerialB.read();
     int arg = SerialB.read();
     switch (cmd)
     {
-        case 0x03:
-            SerialB.print(F("Depth: "));
+        case 0x02: {
+            // Print available information
+            TinyGPSDate d = gps.date;
+            TinyGPSTime t = gps.time;
+            SerialB.print(F("\002{\"time\":\""));
+            if (d.isValid())
+            {
+                char dateBuf[11];
+                sprintf(dateBuf, "%04d-%02d-%02d", d.year(), d.month(),
+                        d.day());
+                SerialB.print(dateBuf);
+                SerialC.print(dateBuf);
+            }
+            else
+                SerialB.print(F("2005-01-06"));
+            SerialB.print(F("T"));
+            if (t.isValid())
+            {
+                char timeBuf[9];
+                sprintf(timeBuf, "%02d:%02d:%02d", t.hour(), t.minute(),
+                        t.second());
+                SerialC.print(timeBuf);
+                SerialB.print(timeBuf);
+            }
+            else
+                SerialB.print(F("00:00:00"));
+            SerialB.print(F("\",\"accel\":[0.0,0.0,0.0],\"speed\":[0.0,0.0,0.0]"
+                            ",\"displ\":[0.0,0.0,0.0],\"pressure\":"));
+            SerialB.print(pressure_sens.read_kpa());
+            SerialB.print(F(",\"depth\":"));
             SerialB.print(pressure_sens.get_depth_mm());
-            SerialB.println(F("mm"));
-            SerialC.print(F("Depth: "));
-            SerialC.print(pressure_sens.get_depth_mm());
-            SerialC.println(F("mm"));
+            if (gps.location.isValid())
+            {
+                SerialB.print(F(",\"lat\":"));
+                SerialB.print(gps.location.lat());
+                SerialB.print(F(",\"lon\":"));
+                SerialB.print(gps.location.lng());
+            }
+            else
+                SerialB.print(F(",\"lat\":0.0,\"lon\":0.0"));
+            SerialB.println(F("}\003"));
             break;
+        }
         case 0x00:
         case 0x01:
-        case 0x02:
-        case 0x04:
         case 0x10:
         case 0x20:
         case 0x21:
@@ -112,7 +158,7 @@ void exec_bluetooth_cmd()
             log(servo_pos);
             servo.write(servo_pos);
             break;
-        case 0x70:
+        case 0xff:
             setup();
         default:
             log(F("Unrecognized command received from bluetooth"));
@@ -121,10 +167,10 @@ void exec_bluetooth_cmd()
 
 void loop()
 {
-    fish_repeller.beep(100, 0.1);
     if (SerialB.available())
     {
         exec_bluetooth_cmd();
     }
-    delay(1000);
+    feed_gps();
+    delay(10);
 }

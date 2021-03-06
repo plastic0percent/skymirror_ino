@@ -16,8 +16,8 @@
 // Computer on Serial0
 #define SerialC Serial
 
-// Beeper at pin 42
-const int fish_repeller_pin = 42;
+// Beeper at pin 3
+const int fish_repeller_pin = 3;
 // Main motor ESC at pin 7
 const int esc_pwm_pin = 7;
 const int speed_max = 2000;
