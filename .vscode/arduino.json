@@ -3,5 +3,5 @@
     "programmer": "AVR ISP",
     "sketch": "skymirror/skymirror.ino",
     "configuration": "cpu=atmega2560",
-    "port": "/dev/tty.usbmodem13101"
+    "port": "/dev/tty.usbmodem1201"
 }

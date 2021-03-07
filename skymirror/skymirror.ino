@@ -52,7 +52,7 @@ void setup()
     init_mpu();
     init_gps();
     init_esc();
-    servo.attach(6);
+    servo.attach(servo_pwm_pin);
     servo.write(servo_pos);
     // TODO: Camera
 }
@@ -95,7 +95,7 @@ void exec_bluetooth_cmd()
             TinyGPSDate d = gps.date;
             TinyGPSTime t = gps.time;
             SerialB.print(F("\002{\"time\":\""));
-            if (d.isValid())
+            if (d.isValid() && d.month() != 0)
             {
                 char dateBuf[11];
                 sprintf(dateBuf, "%04d-%02d-%02d", d.year(), d.month(),
