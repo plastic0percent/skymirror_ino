@@ -86,8 +86,15 @@ void setup()
 // - 0xff   : (raw) re-run init
 void exec_bluetooth_cmd()
 {
-    int cmd = SerialB.read();
-    int arg = SerialB.read();
+    int8_t cmd, arg;
+    cmd = SerialB.read();
+    // At this time, arg must be available
+    while (!SerialB.available())
+        ;
+    arg = SerialB.read();
+    SerialC.print(F("Received: 0x"));
+    SerialC.print(cmd, HEX);
+    SerialC.println(arg, HEX);
     switch (cmd)
     {
         case 0x02: {
@@ -101,7 +108,6 @@ void exec_bluetooth_cmd()
                 sprintf(dateBuf, "%04d-%02d-%02d", d.year(), d.month(),
                         d.day());
                 SerialB.print(dateBuf);
-                SerialC.print(dateBuf);
             }
             else
                 SerialB.print(F("2005-01-06"));
@@ -111,7 +117,6 @@ void exec_bluetooth_cmd()
                 char timeBuf[9];
                 sprintf(timeBuf, "%02d:%02d:%02d", t.hour(), t.minute(),
                         t.second());
-                SerialC.print(timeBuf);
                 SerialB.print(timeBuf);
             }
             else
@@ -168,9 +173,6 @@ void exec_bluetooth_cmd()
 void loop()
 {
     if (SerialB.available())
-    {
         exec_bluetooth_cmd();
-    }
     feed_gps();
-    delay(10);
 }
