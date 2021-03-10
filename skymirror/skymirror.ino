@@ -51,10 +51,10 @@ void setup()
     init_bluetooth();
     init_mpu();
     init_gps();
+    init_servo();
     init_esc();
-    servo.attach(servo_pwm_pin);
-    servo.write(servo_pos);
     // TODO: Camera
+    log(F("READY"));
 }
 
 // Bluetooth commands:
@@ -86,7 +86,7 @@ void setup()
 // - 0xff   : (raw) re-run init
 void exec_bluetooth_cmd()
 {
-    int8_t cmd, arg;
+    uint8_t cmd, arg;
     cmd = SerialB.read();
     // At this time, arg must be available
     while (!SerialB.available())

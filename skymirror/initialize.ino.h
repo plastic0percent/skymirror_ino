@@ -43,19 +43,33 @@ void init_mpu()
 void init_esc()
 {
     log(F("Initializing ESC and motor"));
+    esc_speed = 1500;
     esc.arm();
-    // Sometimes these cycles are required to initiate the ESC
-    for (int speed = 1500; speed <= 2000; ++speed)
+    // This cycle is used to calibrate some models
+    for (int speed = 1000; speed <= 2000; ++speed)
     {
         esc.speed(speed);
         delay(10);
     }
-    for (int speed = 2000; speed > 1500; --speed)
+    for (int speed = 2000; speed >= 1000; --speed)
     {
         esc.speed(speed);
         delay(10);
     }
+    esc.speed(1500);
+    // Stoping at 1500 and wait for a while to start
+    delay(500);
     log(F("ESC and motor initialized"));
+}
+
+// Initialize turning servo
+void init_servo()
+{
+    log(F("Initializing turning servo"));
+    servo.attach(servo_pwm_pin);
+    servo_pos = 15;
+    servo.write(servo_pos);
+    log(F("Turning servo initialized"));
 }
 
 #endif

@@ -38,10 +38,10 @@ Adafruit_MPU6050 mpu;
 TinyGPSPlus gps;
 // Turing Servo
 Servo servo;
-// range is 23-54, in HEX: 0x17-0x36
-int servo_pos = 38;
+// range is 0-30, in HEX: 0x00-0x1E
+int servo_pos;
 // Main motor ESC
 ESC esc(7, speed_min, speed_max, 500);
 // speed, 1501-2000 are forward, 1000-1499 are backward, 1500 is stop
-int esc_speed = 1500;
+int esc_speed;
 #endif
