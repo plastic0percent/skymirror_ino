@@ -2,8 +2,10 @@
 #define definition_ino_h
 
 #include "Adafruit_MPU6050.h"
+#include "Adafruit_Sensor.h"
 #include "Beeper.h"
 #include "ESC.h"
+#include "Pos_Algor.hpp"
 #include "Pressure.h"
 #include "Servo.h"
 #include "TinyGPS++.h"
@@ -32,6 +34,7 @@ const uint8_t pressure_sens_pin = A0;
 DFRobot_Pressure pressure_sens(pressure_sens_pin);
 // MPU6050 motion sensor on I2C
 Adafruit_MPU6050 mpu;
+sensors_event_t mpu_a, mpu_gy, mpu_temp;
 // GPS Decoder
 TinyGPSPlus gps;
 // Turing Servo
@@ -42,4 +45,6 @@ int servo_pos;
 ESC esc(7, speed_min, speed_max, 500);
 // speed, 1501-2000 are forward, 1000-1499 are backward, 1500 is stop
 int esc_speed;
+// Positioning things
+Motion_State<float> motion_state;
 #endif

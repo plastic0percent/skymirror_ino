@@ -1,9 +1,11 @@
 #ifndef initialize_ino_h
 #define initialize_ino_h
 
+#include "Pos_Algor.hpp"
 #include "TimerThree.h"
 
 #include "definitions.ino.h"
+#include "positioning.ino.h"
 #include "util.ino.h"
 
 // Initialize bluetooth
@@ -38,6 +40,9 @@ void init_mpu()
         while (1)
             delay(10);
     }
+    motion_state.start_rest_test();
+    read_mpu_rest();
+    motion_state.end_rest_test();
     logger(F("MPU6050 initialized"));
 }
 

@@ -178,4 +178,5 @@ void loop()
     if (SerialB.available())
         exec_bluetooth_cmd();
     feed_gps();
+    feed_motion();
 }
