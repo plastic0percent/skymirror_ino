@@ -25,3 +25,6 @@
 [submodule "libraries/TimerThree"]
 	path = libraries/TimerThree
 	url = https://github.com/PaulStoffregen/TimerThree.git
+[submodule "libraries/Pos_Algor"]
+	path = libraries/Pos_Algor
+	url = https://github.com/plastic0percent/Pos_Algor.git
