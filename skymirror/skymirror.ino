@@ -38,6 +38,7 @@
 #include "Beeper.h"
 #include "Pressure.h"
 #include "Servo.h"
+#include "TimerThree.h"
 #include "TinyGPS++.h"
 
 #include "definitions.ino.h"
@@ -53,8 +54,9 @@ void setup()
     init_gps();
     init_servo();
     init_esc();
+    init_beeper();
     // TODO: Camera
-    log(F("READY"));
+    logger(F("READY"));
 }
 
 // Bluetooth commands:
@@ -80,7 +82,7 @@ void setup()
 // - 0x20 $1: set direction to $i degrees N (cw)
 // - 0x21 $1: set direction to $i degrees N (ccw)
 // - 0x30 $1: set depth to $1 m
-// - 0x40 $1: set fish repeller frequency to $1 * 30 Hz
+// - 0x40 $1: set beeper frequency to $1 * 30 Hz
 // - 0x50 $1: (raw) set esc speed to $1 * 10
 // - 0x60 $1: (raw) set turning angle to $1
 // - 0xff   : (raw) re-run init
@@ -144,29 +146,30 @@ void exec_bluetooth_cmd()
         case 0x20:
         case 0x21:
         case 0x30:
-            log(F("Stub"));
+            logger(F("Stub"));
             break;
         case 0x40:
-            log(F("Setting fish_repeller to: "));
-            log(arg * 30);
-            fish_repeller.beep_forever(arg * 30);
+            logger(F("Setting fish_repeller to: "));
+            logger(arg * 30);
+            Timer3.pwm(beeper_pin, 0.5 * 1023, Beeper::get_delay(arg * 30));
             break;
         case 0x50:
             esc_speed = arg;
-            log(F("Setting ESC speed to: "));
-            log(esc_speed * 10);
-            esc.speed(esc_speed * 10);
+            logger(F("Setting ESC speed to: "));
+            logger(esc_speed * 10);
+            esc.speed(3000-esc_speed * 10);
             break;
         case 0x60:
             servo_pos = arg;
-            log(F("Setting servo position to: "));
-            log(servo_pos);
+            logger(F("Setting servo position to: "));
+            logger(servo_pos);
             servo.write(servo_pos);
             break;
         case 0xff:
             setup();
+            break;
         default:
-            log(F("Unrecognized command received from bluetooth"));
+            logger(F("Unrecognized command received from bluetooth"));
     }
 }
 

@@ -1,48 +1,50 @@
 #ifndef initialize_ino_h
 #define initialize_ino_h
 
+#include "TimerThree.h"
+
 #include "definitions.ino.h"
 #include "util.ino.h"
 
 // Initialize bluetooth
 void init_bluetooth()
 {
-    log(F("Initializing Bluetooth"));
+    logger(F("Initializing Bluetooth"));
     SerialB.begin(9600);
     // Wait for bluetooth to be up
     while (!SerialB)
         delay(1);
-    log(F("Bluetooth initialized"));
+    logger(F("Bluetooth initialized"));
 }
 
 // Initialize GPS
 void init_gps()
 {
-    log(F("Initializing GPS"));
+    logger(F("Initializing GPS"));
     SerialG.begin(9600);
-    log(F("Decoder library is"));
-    log(TinyGPSPlus::libraryVersion());
-    log(F("GPS initialized"));
+    logger(F("Decoder library is"));
+    logger(TinyGPSPlus::libraryVersion());
+    logger(F("GPS initialized"));
 }
 
 // Initialize MPU6050
 void init_mpu()
 {
-    log(F("Initializing MPU6050"));
+    logger(F("Initializing MPU6050"));
     // Try to initialize MPU6050
     if (!mpu.begin())
     {
-        log(F("Failed to initialize MPU6050, check wiring"));
+        logger(F("Failed to initialize MPU6050, check wiring"));
         while (1)
             delay(10);
     }
-    log(F("MPU6050 initialized"));
+    logger(F("MPU6050 initialized"));
 }
 
 // Initialize ESC and motor
 void init_esc()
 {
-    log(F("Initializing ESC and motor"));
+    logger(F("Initializing ESC and motor"));
     esc_speed = 1500;
     esc.arm();
     // This cycle is used to calibrate some models
@@ -59,17 +61,26 @@ void init_esc()
     esc.speed(1500);
     // Stoping at 1500 and wait for a while to start
     delay(500);
-    log(F("ESC and motor initialized"));
+    logger(F("ESC and motor initialized"));
 }
 
 // Initialize turning servo
 void init_servo()
 {
-    log(F("Initializing turning servo"));
+    logger(F("Initializing turning servo"));
     servo.attach(servo_pwm_pin);
     servo_pos = 15;
     servo.write(servo_pos);
-    log(F("Turning servo initialized"));
+    logger(F("Turning servo initialized"));
+}
+
+// Initialize fish repeller beeper
+void init_beeper()
+{
+    logger(F("Initializing fish repeller beeper"));
+    pinMode(beeper_pin, OUTPUT);
+    Timer3.initialize(40);
+    logger(F("Fish repeller beeper initialized"));
 }
 
 #endif

@@ -5,7 +5,7 @@
 
 template <class MsgType>
 // Log a message to both Serial and Bluetooth
-void log(MsgType message)
+void logger(MsgType message)
 {
     SerialC.println(message);
     SerialB.println(message);

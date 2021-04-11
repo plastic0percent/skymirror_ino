@@ -17,19 +17,17 @@
 #define SerialC Serial
 
 // Beeper at pin 3
-const int fish_repeller_pin = 3;
+const uint8_t beeper_pin = 3;
 // Main motor ESC at pin 7
-const int esc_pwm_pin = 7;
+const uint8_t esc_pwm_pin = 7;
 const int speed_max = 2000;
 const int speed_min = 1000;
 // Turning servo at pin 6;
-const int servo_pwm_pin = 6;
+const uint8_t servo_pwm_pin = 6;
 // Pressure sensor at pin A0
-const int pressure_sens_pin = A0;
+const uint8_t pressure_sens_pin = A0;
 
 // Global objects
-// The fish repeller is a beeper
-Beeper fish_repeller(fish_repeller_pin);
 // Pressure sensor
 DFRobot_Pressure pressure_sens(pressure_sens_pin);
 // MPU6050 motion sensor on I2C
