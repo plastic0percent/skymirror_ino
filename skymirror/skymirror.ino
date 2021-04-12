@@ -123,8 +123,25 @@ void exec_bluetooth_cmd()
             }
             else
                 SerialB.print(F("00:00:00"));
-            SerialB.print(F("\",\"accel\":[0.0,0.0,0.0],\"speed\":[0.0,0.0,0.0]"
-                            ",\"displ\":[0.0,0.0,0.0],\"pressure\":"));
+            SerialB.print(F("\",\"accel\":["));
+            SerialB.print(motion_state.get_last_ax());
+            SerialB.print(F(","));
+            SerialB.print(motion_state.get_last_ay());
+            SerialB.print(F(","));
+            SerialB.print(motion_state.get_last_az());
+            SerialB.print(F("],\"speed\":["));
+            SerialB.print(motion_state.x_velo);
+            SerialB.print(F(","));
+            SerialB.print(motion_state.y_velo);
+            SerialB.print(F(","));
+            SerialB.print(motion_state.z_velo);
+            SerialB.print(F("],\"displ\":["));
+            SerialB.print(motion_state.x_disp);
+            SerialB.print(F(","));
+            SerialB.print(motion_state.y_disp);
+            SerialB.print(F(","));
+            SerialB.print(motion_state.z_disp);
+            SerialB.print(F("],\"pressure\":"));
             SerialB.print(pressure_sens.read_kpa());
             SerialB.print(F(",\"depth\":"));
             SerialB.print(pressure_sens.get_depth_mm());
